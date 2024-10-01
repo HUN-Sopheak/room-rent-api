@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module'; 
 import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv'
-import * as path from 'path'
 import helmet from 'helmet';
 dotenv.config()
 async function bootstrap() {
@@ -24,7 +23,7 @@ async function bootstrap() {
     forbidNonWhitelisted: true, 
   }));
   
-  app.setGlobalPrefix(process.env.APP_PREFIX  || 'api');
+  app.setGlobalPrefix('api');
   await app.listen(process.env.APP_LISTEN || 3000);
 }
 bootstrap();

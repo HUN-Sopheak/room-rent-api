@@ -1,3 +1,4 @@
+// auth.module.ts
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -5,6 +6,8 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtAuthGuard } from 'src/guard/jwt.guard';
+import { CustomerModule } from '../customer/customer.module';
 
 @Module({
   imports: [
@@ -16,8 +19,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '1h' },
       }),
     }),
-    UserModule],
+    UserModule,CustomerModule],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy],
+  providers: [AuthService, JwtStrategy, JwtAuthGuard], // Add JwtAuthGuard to providers
+  exports: [JwtModule, JwtAuthGuard],
 })
 export class AuthModule {}

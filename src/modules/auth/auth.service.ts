@@ -22,6 +22,7 @@ export class AuthService {
       data,
     };
   }
+
   async login(createAuthDto: CreateAuthDto) {
     const { username, password } = createAuthDto;
     const user = await this.userRepository.findOne({ where: { username } });
@@ -41,5 +42,7 @@ export class AuthService {
       access_token: token,
     });
   }
+
+  
 
 }
