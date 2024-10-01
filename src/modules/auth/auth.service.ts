@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../user/entities/user.entity';
+import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { HelpersService } from 'src/utils/helper/helpers.service';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+    private readonly helper: HelpersService,
+  ) { }
+
+  private response(status: HttpStatus, message: string, data: any = null) {
+    return {
+      status,
+      message,
+      data,
+    };
+  }
+  async login(createAuthDto: CreateAuthDto) {
+    const { username, password } = createAuthDto;
+    const user = await this.userRepository.findOne({ where: { username } });
+
+    if (!user) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    const isPasswordValid = await this.helper.comparePasswords(password, user.password);
+    if (!isPasswordValid) {
+      throw new HttpException('Invalid Password', HttpStatus.UNAUTHORIZED);
+    }
+
+    const token = this.jwtService.sign({ id: user.id, username: user.username });
+
+    return this.response(HttpStatus.OK, 'Login successfuly', {
+      access_token: token,
+    });
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
 }

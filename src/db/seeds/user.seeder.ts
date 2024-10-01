@@ -31,6 +31,7 @@ export default class UserSeeder implements Seeder {
       
       await app.close();  
     } catch (error) {
+      console.clear();
       console.error('Error while seeding User data:', error);
     }
   }
