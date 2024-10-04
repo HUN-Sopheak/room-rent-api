@@ -20,6 +20,9 @@ export class Customer {
     @Column({ type: 'varchar', length: 255 })
     address: string;
 
+    @Column({ type: 'varchar', length: 255 })
+    dob:string
+
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date; 
 
