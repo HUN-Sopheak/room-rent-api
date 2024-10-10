@@ -21,7 +21,7 @@ import { CustomerModule } from '../customer/customer.module';
     }),
     UserModule,CustomerModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard], // Add JwtAuthGuard to providers
+  providers: [AuthService, JwtStrategy, JwtAuthGuard], 
   exports: [JwtModule, JwtAuthGuard],
 })
 export class AuthModule {}

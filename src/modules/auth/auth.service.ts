@@ -23,10 +23,9 @@ export class AuthService {
     };
   }
 
-  async login(createAuthDto: CreateAuthDto) {
+   async login(createAuthDto: CreateAuthDto) {
     const { username, password } = createAuthDto;
     const user = await this.userRepository.findOne({ where: { username } });
-
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
@@ -43,6 +42,5 @@ export class AuthService {
     });
   }
 
-  
 
 }
